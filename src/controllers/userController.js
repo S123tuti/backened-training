@@ -1,18 +1,16 @@
 const jwt = require("jsonwebtoken");
 const userModel = require("../models/userModel");
 
-/*
-  Read all the comments multiple times to understand why we are doing what we are doing in login api and getUserData api
-*/
-const createUser = async function (abcd, xyz) {
-  //You can name the req, res objects anything.
+
+const newUser = async function (req, res) {
+  let data = req.body;
+  let savedData = await userModel.create(data);
+  console.log(req.newAtribute);
+  res.send({ msg: savedData });
+};
+//You can name the req, res objects anything.
   //but the first parameter is always the request 
   //the second parameter is always the response
-  let data = abcd.body;
-  let savedData = await userModel.create(data);
-  console.log(abcd.newAtribute);
-  xyz.send({ msg: savedData });
-};
 
 const loginUser = async function (req, res) {
   let userName = req.body.emailId;
@@ -23,7 +21,7 @@ const loginUser = async function (req, res) {
     return res.send({
       status: false,
       msg: "username or the password is not corerct",
-    });
+    }); 
 
   // Once the login is successful, create the jwt token with sign function
   // Sign function has 2 inputs:
@@ -89,10 +87,19 @@ const updateUser = async function (req, res) {
 
   let userData = req.body;
   let updatedUser = await userModel.findOneAndUpdate({ _id: userId }, userData);
-  res.send({ status: updatedUser, data: updatedUser });
-};
-
-module.exports.createUser = createUser;
+  res.send({ status: updatedUser, data: updatedUser }); 
+}; 
+const isdelete = async function(req, res){
+let userId = req.params.userId
+if ( !userId){
+  return res.send ({msg: "error"})
+}
+let findId = await userModel.findByIdAndUpdate({_id: userId}, {isDeleted: true}, {new: true})
+res.send (findId)   
+}
+module.exports.newUser = newUser;
 module.exports.getUserData = getUserData;
 module.exports.updateUser = updateUser;
 module.exports.loginUser = loginUser;
+module.exports.isdelete = isdelete
+  
