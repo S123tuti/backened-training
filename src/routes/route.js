@@ -13,7 +13,7 @@ router.post("/login", userController.loginUser)
  
 
 router.get("/users/:userId", auth.authenticate, auth.authorise, userController.getUserData)
-// router.post("/users/:userId/posts", userController.postMessage)
+router.post("/users/:userId/posts", userController.postMessage)
 
 router.put("/users/:userId", auth.authenticate, auth.authorise, userController.updateUser)
 router.delete('/users/:userId', auth.authenticate, auth.authorise, userController.deleteUser)
